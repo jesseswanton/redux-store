@@ -3,13 +3,14 @@ import { useMutation } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { LOGIN } from '../utils/mutations';
 import Auth from '../utils/auth';
-import { useDispatch } from 'react-redux'; // Import useDispatch from Redux
-import { setUser } from '../utils/actions'; // Import your action to set the user
+import { useDispatch } from 'react-redux'; 
+import { setUser } from '../utils/actions';
 
 function Login() {
   const [formState, setFormState] = useState({ email: '', password: '' });
   const [login, { error }] = useMutation(LOGIN);
-  const dispatch = useDispatch(); // Initialize dispatch
+  //Redux
+  const dispatch = useDispatch();
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -20,8 +21,8 @@ function Login() {
       const token = mutationResponse.data.login.token;
       Auth.login(token);
 
-      // Dispatch action to store user data and token in Redux
-      dispatch(setUser(mutationResponse.data.login.user)); // Adjust based on your data structure
+      // Send action to store user data and token in Redux
+      dispatch(setUser(mutationResponse.data.login.user));
     } catch (e) {
       console.log(e);
     }

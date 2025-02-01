@@ -1,6 +1,7 @@
+//Redux
 import { Provider } from 'react-redux';
 //Redux
-import { store } from './store';
+import store from './store';
 
 const GlobalState = ({ children }) => {
   //redux provider
