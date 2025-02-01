@@ -1,10 +1,16 @@
 import { useEffect } from 'react';
 import { useMutation } from '@apollo/client';
+//Redux
+import { useDispatch } from 'react-redux';
 import Jumbotron from '../components/Jumbotron';
 import { ADD_ORDER } from '../utils/mutations';
+//Redux
+import { clearCart } from '../redux/actions';
 import { idbPromise } from '../utils/helpers';
 
 function Success() {
+  //Redux
+  const dispatch = useDispatch();
   const [addOrder] = useMutation(ADD_ORDER);
 
   useEffect(() => {
@@ -13,12 +19,20 @@ function Success() {
       const products = cart.map((item) => item._id);
 
       if (products.length) {
-        const { data } = await addOrder({ variables: { products } });
-        const productData = data.addOrder.products;
+        try {
+          const { data } = await addOrder({ variables: { products } });
 
-        productData.forEach((item) => {
-          idbPromise('cart', 'delete', item);
-        });
+          if (data?.addOrder) {
+            //Redux
+            dispatch(clearCart());
+            //Redux
+            data.addOrder.products.forEach((item) => {
+              idbPromise('cart', 'delete', item);
+            });
+          }
+        } catch (error) {
+          console.error('Order submission error:', error);
+        }
       }
 
       setTimeout(() => {
@@ -27,7 +41,7 @@ function Success() {
     }
 
     saveOrder();
-  }, [addOrder]);
+  }, [addOrder, dispatch]);
 
   return (
     <div>
