@@ -6,7 +6,7 @@ import Auth from '../utils/auth';
 import { useDispatch } from 'react-redux'; // Import useDispatch from Redux
 import { setUser } from '../utils/actions'; // Import your action to set the user
 
-function Login(props) {
+function Login() {
   const [formState, setFormState] = useState({ email: '', password: '' });
   const [login, { error }] = useMutation(LOGIN);
   const dispatch = useDispatch(); // Initialize dispatch

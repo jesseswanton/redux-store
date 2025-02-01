@@ -9,10 +9,15 @@ import {
   CLEAR_CART,
   TOGGLE_CART,
   SET_USER,
+  LOGOUT_USER,
 } from './actions';
 
+import decode from 'jwt-decode';
+
 const initialState = {
-  user: null, // New global user state
+  // New Redux global user state
+  token: localStorage.getItem('id_token') || null,
+  user: localStorage.getItem('id_token') ? decode(localStorage.getItem('id_token')) : null,
   products: [],
   cart: [],
   cartOpen: false,
@@ -21,13 +26,22 @@ const initialState = {
   loading: false,
 };
 
-
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_USER:
       return {
         ...state,
-        user: action.user,
+        token: action.payload?.token || null,
+        user: action.payload?.user || null,
+      };
+
+    case LOGOUT_USER:
+      // Clear token
+      localStorage.removeItem('id_token');
+      return {
+        ...state,
+        token: null,
+        user: null,
       };
 
     case UPDATE_PRODUCTS:
@@ -53,15 +67,11 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         cartOpen: true,
-        cart: state.cart.map((product) => {
-          if (action._id === product._id) {
-            return {
-              ...product,
-              purchaseQuantity: action.purchaseQuantity,
-            };
-          }
-          return product;
-        }),
+        cart: state.cart.map((product) =>
+          action._id === product._id
+            ? { ...product, purchaseQuantity: action.purchaseQuantity }
+            : product
+        ),
       };
 
     case REMOVE_FROM_CART:
@@ -96,13 +106,12 @@ export const reducer = (state = initialState, action) => {
         currentCategory: action.currentCategory,
       };
 
-    // Optional: loading actions (if you implement them)
     case 'FETCH_PRODUCTS_REQUEST':
       return {
         ...state,
         loading: true,
       };
-    
+
     case 'FETCH_PRODUCTS_SUCCESS':
       return {
         ...state,
@@ -110,7 +119,6 @@ export const reducer = (state = initialState, action) => {
         products: action.products,
       };
 
-    // Default case to avoid crashes
     default:
       return state;
   }

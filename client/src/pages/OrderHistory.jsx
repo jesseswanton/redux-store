@@ -5,20 +5,23 @@ import { fetchUser } from '../redux/actions';
 
 function OrderHistory() {
   const dispatch = useDispatch();
-  //Redux
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !user.orders) {
       dispatch(fetchUser());
     }
   }, [user, dispatch]);
+
+  if (!user) {
+    return <p>Loading...</p>; // Or a loading spinner
+  }
 
   return (
     <div className="container my-1">
       <Link to="/">← Back to Products</Link>
 
-      {user ? (
+      {user.orders && user.orders.length > 0 ? (
         <>
           <h2>
             Order History for {user.firstName} {user.lastName}
@@ -42,7 +45,9 @@ function OrderHistory() {
             </div>
           ))}
         </>
-      ) : null}
+      ) : (
+        <p>No orders found.</p>
+      )}
     </div>
   );
 }
