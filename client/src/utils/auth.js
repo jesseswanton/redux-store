@@ -1,12 +1,8 @@
 import decode from 'jwt-decode';
-//Redux
-import store from '../redux/store';
-import { setUser, logoutUser } from '../redux/actions/authActions';
 
 class AuthService {
   getProfile() {
-    const token = this.getToken();
-    return token ? decode(token) : null;
+    return decode(this.getToken());
   }
 
   loggedIn() {
@@ -28,14 +24,12 @@ class AuthService {
 
   getToken() {
     // Retrieves the user token from localStorage
-    return store.getState().auth.token || localStorage.getItem('id_token');
+    return localStorage.getItem('id_token');
   }
 
   login(idToken) {
     // Saves user token to localStorage
     localStorage.setItem('id_token', idToken);
-    //Redux
-    store.dispatch(setUser(idToken));
 
     window.location.assign('/');
   }
@@ -43,8 +37,6 @@ class AuthService {
   logout() {
     // Clear user token and profile data from localStorage
     localStorage.removeItem('id_token');
-    //Redux
-    store.dispatch(logoutUser());
     // this will reload the page and reset the state of the application
     window.location.assign('/');
   }

@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import Jumbotron from '../components/Jumbotron';
 import { ADD_ORDER } from '../utils/mutations';
 //Redux
-import { clearCart } from '../redux/actions';
+import { clearCart } from '../utils/actions';
 import { idbPromise } from '../utils/helpers';
 
 function Success() {

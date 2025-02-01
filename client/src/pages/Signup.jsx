@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import Auth from '../utils/auth';
 import { ADD_USER } from '../utils/mutations';
 //Redux
-import { setUser } from '../redux/actions';
+import { setUser } from '../utils/actions';
 
 function Signup() {
   //Redux
