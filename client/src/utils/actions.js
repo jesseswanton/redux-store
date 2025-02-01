@@ -9,6 +9,7 @@ import {
     UPDATE_CATEGORIES,
     UPDATE_CURRENT_CATEGORY,
     SET_USER,
+    LOGOUT_USER,
   } from './actionTypes';
   
 import { QUERY_USER } from '../utils/queries';
@@ -34,6 +35,12 @@ try {
     console.error('Error fetching user:', error);
 }
 };
+
+export const logoutUser = () => {
+    return {
+      type: LOGOUT_USER,
+    };
+  };
 
 // Action creators for products
 export const updateProducts = (products) => {
