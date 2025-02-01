@@ -1,4 +1,4 @@
-# React/Redux StorE
+# React/Redux Store
 
 This is a React-based online story using Redux for state management, Apollo Client for interacting with a GraphQL API, and JWT authentication. 
 
