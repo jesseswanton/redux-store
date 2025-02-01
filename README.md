@@ -44,3 +44,4 @@ After checkout, your order history will be updated.
 ![checkout](client/src/assets/rs5.PNG)
 
 Deployed application:
+https://redux-store-xxx1.onrender.com
