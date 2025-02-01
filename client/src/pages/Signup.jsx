@@ -1,25 +1,36 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
+//Redux
+import { useDispatch } from 'react-redux';
 import Auth from '../utils/auth';
 import { ADD_USER } from '../utils/mutations';
+//Redux
+import { setUser } from '../redux/actions';
 
-function Signup(props) {
-  const [formState, setFormState] = useState({ email: '', password: '' });
+function Signup() {
+  //Redux
+  const dispatch = useDispatch();
+  const [formState, setFormState] = useState({ email: '', password: '', firstName: '', lastName: '' });
   const [addUser] = useMutation(ADD_USER);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const mutationResponse = await addUser({
-      variables: {
-        email: formState.email,
-        password: formState.password,
-        firstName: formState.firstName,
-        lastName: formState.lastName,
-      },
-    });
-    const token = mutationResponse.data.addUser.token;
-    Auth.login(token);
+    try {
+      const { data } = await addUser({
+        variables: { ...formState },
+      });
+
+      if (data?.addUser) {
+        const { token, user } = data.addUser;
+        //Redux
+        Auth.login(token);
+        //Redux
+        dispatch(setUser(user));
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+    }
   };
 
   const handleChange = (event) => {
@@ -41,7 +52,7 @@ function Signup(props) {
           <input
             placeholder="First"
             name="firstName"
-            type="firstName"
+            type="text"
             id="firstName"
             onChange={handleChange}
           />
@@ -51,7 +62,7 @@ function Signup(props) {
           <input
             placeholder="Last"
             name="lastName"
-            type="lastName"
+            type="text"
             id="lastName"
             onChange={handleChange}
           />

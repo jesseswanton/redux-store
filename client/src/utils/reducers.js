@@ -8,20 +8,28 @@ import {
   UPDATE_CURRENT_CATEGORY,
   CLEAR_CART,
   TOGGLE_CART,
+  SET_USER,
 } from './actions';
 
 const initialState = {
+  user: null, // New global user state
   products: [],
   cart: [],
   cartOpen: false,
   categories: [],
   currentCategory: '',
-  loading: false, // Optional loading state
+  loading: false,
 };
 
-// The reducer is a function that accepts the current state and an action. It returns a new state based on that action.
+
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_USER:
+      return {
+        ...state,
+        user: action.user,
+      };
+
     case UPDATE_PRODUCTS:
       return {
         ...state,
